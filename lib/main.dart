@@ -1,24 +1,24 @@
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:qurban_app/ui/home.dart';
-//package letak folder Anda
+import 'package:qurban_app/helpers/firebase_options.dart';
+import 'package:qurban_app/ui/login.dart';
+import 'package:qurban_app/ui/register.dart';
+import 'package:qurban_app/ui/admin/homepage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        // Remove the debug banner
-        debugShowCheckedModeBanner: false,
-        title: 'Kindacode.com',
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-        ),
-        home: const HomePage());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
   }
 }
