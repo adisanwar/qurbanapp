@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "473095926016",
+    "project_id": "qurban-dfedf",
+    "storage_bucket": "qurban-dfedf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473095926016:android:26336e1b7a3c623ca5c3e5",
+        "android_client_info": {
+          "package_name": "com.example.qurban_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaDair8PHVfxxlvyMEyjpN8eH1-kh9qXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
