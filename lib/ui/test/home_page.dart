@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:qurban_app/ui/test/services/firestore.dart';
+import 'package:qurban_app/helpers/firestore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

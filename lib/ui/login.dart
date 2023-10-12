@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:qurban_app/helpers/logincontroller.dart';
+import 'package:qurban_app/ui/register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -8,7 +13,24 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+   TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final LoginController _loginController =
+      Get.put(LoginController());
+final _formkey = GlobalKey<FormState>();
+void _handleLogin() async {
+    // Call the registerUser method from the RegistrationController
+    _loginController.login(
+     
+      _emailController.text,
+      _passwordController.text,
+      
+    );
+  }
+
+late String email, password, role;
   bool isPasswordVisible = false;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +66,12 @@ class _LoginState extends State<Login> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: TextField(
+                    child: TextFormField(
+                      controller: _emailController,
+                      key: _formkey,
                       decoration: InputDecoration(
                         hintText:
-                            "Username", // Add a space as a placeholder for the hint text
+                            "Masukan Email", // Add a space as a placeholder for the hint text
                         prefixIcon: Icon(Icons.person),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -65,6 +89,7 @@ class _LoginState extends State<Login> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                       ),
                     ),
+                    
                   ),
                   // SizedBox(
                   //   height: 12,
@@ -86,6 +111,7 @@ class _LoginState extends State<Login> {
                     child: TextField(
                       obscureText:
                           !isPasswordVisible, // Ini mengubahnya menjadi password field
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: "Password",
                         prefixIcon: Icon(Icons.lock),
@@ -115,27 +141,126 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        "Lupa Password?",
-                        style: TextStyle(color: Colors.blue),
+                      TextButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            builder: (context) => Container(
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                children: [
+                                  Padding(padding: EdgeInsets.all(10)),
+                                  Text("Reset Password",
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        hintText:
+                                            "Masukan No Handphone", // Add a space as a placeholder for the hint text
+                                        prefixIcon: Icon(Icons.phone),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey,
+                                          ), // Gray border when focused
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.grey,
+                                          ), // Gray border when enabled
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        // Set the floating label behavior to "always"
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always,
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      maxLength:
+                                          12, // Batasi input hingga 12 karakter
+                                      maxLines: 1, // Tetapkan maxLines ke 1
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 50,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              // Add your onPressed function here
+                                            },
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
+                                              ),
+                                            ),
+                                            child: Text("Reset Password"),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+
+                                  // Tambahkan teks atau widget lainnya di sini jika diperlukan
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Text(
+                              "Lupa Password",
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ],
+                        ),
                       )
+
+                      // Text(
+                      //   "Lupa Password?",
+                      //   style: TextStyle(color: Colors.blue),
+                      // )
                     ],
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  
 
                   Container(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
+                        _handleLogin();
+                        // if (_formkey.currentState!.validate()) {
+                        //   _formkey.currentState!.save();
+                        // }
                         // Aksi ketika tombol ditekan
                       },
                       style: ButtonStyle(
@@ -159,12 +284,12 @@ class _LoginState extends State<Login> {
                       Text("Belum punya Akun? "),
                       InkWell(
                         onTap: () {
-                          Navigator();
-                          // Tambahkan kode navigasi ke halaman pendaftaran di sini
-                          Navigator.of(context).pushNamed('/register'); // Navigasi ke halaman pendaftaran
+                          Get.to(() =>const Register());
                         },
-                        child: Text("Daftar dulu Bro!"),
-                        
+                        child: Text(
+                          "Daftar dulu Bro!",
+                          style: TextStyle(color: Colors.blue),
+                        ),
                       ),
                     ],
                   )
@@ -175,5 +300,22 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+}
+
+
+String? ValidateEmail(String email) {
+  if (email.isEmpty) {
+    return 'Masukan Email';
+  }else{
+    return null; 
+  }
+}
+
+String? ValidatePassword(String password) {
+  if (password.isEmpty) {
+    return 'Masukan Password';
+  }else{
+    return null; 
   }
 }
