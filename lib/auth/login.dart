@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:qurban_app/auth/register.dart';
 import 'package:qurban_app/helpers/logincontroller.dart';
-import 'package:qurban_app/auth/register.dart';
+
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -304,19 +304,3 @@ late String email, password, role;
   }
 }
 
-
-String? ValidateEmail(String email) {
-  if (email.isEmpty) {
-    return 'Masukan Email';
-  }else{
-    return null; 
-  }
-}
-
-String? ValidatePassword(String password) {
-  if (password.isEmpty) {
-    return 'Masukan Password';
-  }else{
-    return null; 
-  }
-}

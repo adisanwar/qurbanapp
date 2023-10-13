@@ -10,20 +10,21 @@ class RegistrationController extends GetxController {
   final RxBool isRegistered = false.obs;
 
   Future<void> registerUser(
+    
       String email, String password, String no_kk, String phone, String wali) async {
-        email = email.trim();
     try {
+      print('Email: $email');
+    print('Password: $password');
+    print('No KK: $no_kk');
+    print('Phone: $phone');
+    print('Wali: $wali');
       final emailExists = await _checkEmailExists(email);
       final phoneExists = await _checkPhoneExists(phone);
       final no_kkExists = await _checkno_kkExists(no_kk);
+      final waliExists = await _checkWaliExists(wali);
 
-      if (emailExists ) {
-        Get.snackbar("Error", "Email, phone, or no KK is already in use");
-      }if (phoneExists) {
-        Get.snackbar("Error","phone, is already in use");
-      }
-      if (no_kkExists) {
-        Get.snackbar("Error", "no KK is already in use");
+      if (emailExists || phoneExists || no_kkExists || waliExists) {
+        Get.snackbar("Error", "Email, phone, no KK, or wali is already in use");
       } else {
         UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,
@@ -33,15 +34,15 @@ class RegistrationController extends GetxController {
         if (userCredential.user != null) {
           // Store additional user data in Firestore
           await _firestore.collection('users').doc(userCredential.user!.uid).set({
-            'wali': wali,
             'no_kk': no_kk,
             'phone': phone,
+            'wali': wali, // Add the "wali" field
             'role': 'user',
           });
 
           isRegistered.value = true;
           Get.to(() => Login());
-          Get.snackbar("Success","Pendaftaran Berhasil Silahkan Login");
+          Get.snackbar("Success", "Pendaftaran Berhasil Silahkan Login");
         }
       }
     } catch (e) {
@@ -72,6 +73,15 @@ class RegistrationController extends GetxController {
     QuerySnapshot result = await _firestore
         .collection('users')
         .where('no_kk', isEqualTo: no_kk)
+        .get();
+
+    return result.docs.isNotEmpty;
+  }
+
+  Future<bool> _checkWaliExists(String wali) async {
+    QuerySnapshot result = await _firestore
+        .collection('users')
+        .where('wali', isEqualTo: wali)
         .get();
 
     return result.docs.isNotEmpty;

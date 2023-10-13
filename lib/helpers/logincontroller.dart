@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:qurban_app/models/user_model.dart';
 import 'package:qurban_app/ui/admin/homepage.dart';
 import 'package:qurban_app/ui/user/user.dart';
 

@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qurban_app/helpers/registrationcontroller.dart';
@@ -13,8 +13,8 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _noKkController = TextEditingController();
@@ -32,17 +32,17 @@ class _RegisterState extends State<Register> {
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
 
-  String _email = "";
-  String _password = "";
+  // String _email = "";
+  // String _password = "";
 
   void _handleRegister() async {
     // Call the registerUser method from the RegistrationController
     _registrationController.registerUser(
-      _waliController.text,
       _emailController.text,
       _passwordController.text,
       _noKkController.text,
       _phoneController.text,
+      _waliController.text,
     );
   }
 
@@ -166,7 +166,7 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: TextFormField(
-                          keyboardType: TextInputType.emailAddress,
+                          // keyboardType: TextInputType.emailAddress,
                           controller: _emailController,
                           decoration: InputDecoration(
                             hintText:
@@ -192,11 +192,11 @@ class _RegisterState extends State<Register> {
                               return "Masukan Email!";
                             }
                           },
-                          onChanged: (value) {
-                            setState(() {
-                              _email = value;
-                            });
-                          },
+                          // onChanged: (value) {
+                          //   setState(() {
+                          //     _email = value;
+                          //   });
+                          // },
                         ),
                       ),
                       SizedBox(height: 10),
