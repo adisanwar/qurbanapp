@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:qurban_app/ui/login.dart';
+import 'package:qurban_app/auth/login.dart';
+
 
 class RegistrationController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qurban_app/ui/admin/homepage.dart';
 import 'package:qurban_app/ui/user/user.dart';
 
+import '../auth/login.dart';
+
 class LoginController extends GetxController {
   var isLoggedIn = false.obs;
   var userRole = 'user'.obs;
@@ -14,6 +16,7 @@ class LoginController extends GetxController {
   try {
     final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
     if (userDoc.exists) {
+      print(userDoc['role']);
       return userDoc['role'] ?? 'user';
     } else {
       return 'user';
@@ -40,9 +43,9 @@ class LoginController extends GetxController {
 
         // Arahkan pengguna ke halaman yang sesuai
         if (userRole.value == 'admin') {
-          Get.to(()=>HomePage());
+          Get.to(()=>const HomePage());
         } else {
-          Get.to(()=> UserPage());
+          Get.to(()=>  UserPage ());
         }
       }
     } catch (e) {
@@ -90,8 +93,18 @@ class LoginController extends GetxController {
   // Fungsi getUserRole tetap sama seperti sebelumnya.
   
   Future<void> logout() async {
+  try {
     await _auth.signOut();
+    // Additional logic to reset user-related data and states
     isLoggedIn.value = false;
     userRole.value = 'guest';
+
+    // Use Get.to to navigate to a different page after logout
+    Get.to(()=>Login()); // Replace LoginPage() with the page you want to navigate to
+  } catch (e) {
+    // Handle any errors that occur during the logout process
+    print("Error during logout: $e");
   }
+}
+
 }

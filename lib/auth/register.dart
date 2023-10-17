@@ -2,8 +2,9 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qurban_app/auth/login.dart';
 import 'package:qurban_app/helpers/registrationcontroller.dart';
-import 'package:qurban_app/ui/login.dart';
+
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
