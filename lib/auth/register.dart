@@ -16,12 +16,12 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   // final FirebaseAuth _auth = FirebaseAuth.instance;
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _noKkController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
-  TextEditingController _waliController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _noKkController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _waliController = TextEditingController();
   final RegistrationController _registrationController =
       Get.put(RegistrationController());
 
@@ -54,23 +54,23 @@ class _RegisterState extends State<Register> {
         child: Center(
           child: SingleChildScrollView(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 32),
+              margin: const EdgeInsets.symmetric(horizontal: 32),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Register",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -82,13 +82,13 @@ class _RegisterState extends State<Register> {
                           maxLength: 16,
                           decoration: InputDecoration(
                             hintText: "No KK (cth. 2170xxx)",
-                            prefixIcon: Icon(Icons.perm_identity),
+                            prefixIcon: const Icon(Icons.perm_identity),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -101,7 +101,7 @@ class _RegisterState extends State<Register> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -113,13 +113,13 @@ class _RegisterState extends State<Register> {
                           maxLength: 12,
                           decoration: InputDecoration(
                             hintText: "Nomor HP (cth. 0812xxx)",
-                            prefixIcon: Icon(Icons.phone),
+                            prefixIcon: const Icon(Icons.phone),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -128,6 +128,7 @@ class _RegisterState extends State<Register> {
                             if (value == null || value.isEmpty) {
                               return "Masukan No Hp!";
                             }
+                            return null;
                           },
                         ),
                       ),
@@ -141,13 +142,13 @@ class _RegisterState extends State<Register> {
                           // maxLength: 16,
                           decoration: InputDecoration(
                             hintText: "Masukan Nama",
-                            prefixIcon: Icon(Icons.perm_identity),
+                            prefixIcon: const Icon(Icons.perm_identity),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -160,7 +161,7 @@ class _RegisterState extends State<Register> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -172,15 +173,15 @@ class _RegisterState extends State<Register> {
                           decoration: InputDecoration(
                             hintText:
                                 "Email", // Add a space as a placeholder for the hint text
-                            prefixIcon: Icon(Icons.mail),
+                            prefixIcon: const Icon(Icons.mail),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.grey,
                               ), // Gray border when focused
                               borderRadius: BorderRadius.circular(20),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.grey,
                               ), // Gray border when enabled
                               borderRadius: BorderRadius.circular(20),
@@ -192,6 +193,7 @@ class _RegisterState extends State<Register> {
                             if (value == null || value.isEmpty) {
                               return "Masukan Email!";
                             }
+                            return null;
                           },
                           // onChanged: (value) {
                           //   setState(() {
@@ -200,7 +202,7 @@ class _RegisterState extends State<Register> {
                           // },
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -211,7 +213,7 @@ class _RegisterState extends State<Register> {
                           obscureText: !isPasswordVisible,
                           decoration: InputDecoration(
                             hintText: "Password",
-                            prefixIcon: Icon(Icons.lock),
+                            prefixIcon: const Icon(Icons.lock),
                             suffixIcon: IconButton(
                               icon: Icon(isPasswordVisible
                                   ? Icons.visibility
@@ -223,11 +225,11 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(0),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -236,11 +238,12 @@ class _RegisterState extends State<Register> {
                             if (value == null || value.isEmpty) {
                               return "Masukan Password!";
                             }
+                            return null;
                           },
                         ),
                       ),
 
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -251,7 +254,7 @@ class _RegisterState extends State<Register> {
                           obscureText: !isConfirmPasswordVisible,
                           decoration: InputDecoration(
                             hintText: "Konfirmasi Password",
-                            prefixIcon: Icon(Icons.lock),
+                            prefixIcon: const Icon(Icons.lock),
                             suffixIcon: IconButton(
                               icon: Icon(isConfirmPasswordVisible
                                   ? Icons.visibility
@@ -264,11 +267,11 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                              borderSide: const BorderSide(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -277,6 +280,7 @@ class _RegisterState extends State<Register> {
                             if (value == null || value.isEmpty) {
                               return "Masukan konfirmasi Password!";
                             }
+                            return null;
                           },
                         ),
                       ),
@@ -295,8 +299,8 @@ class _RegisterState extends State<Register> {
                       //     )
                       //   ],
                       // ),
-                      SizedBox(height: 12),
-                      Container(
+                      const SizedBox(height: 12),
+                      SizedBox(
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
@@ -317,29 +321,29 @@ class _RegisterState extends State<Register> {
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
                           ),
                           child:
                               isRegistering // Show loading indicator if isRegistering is true
-                                  ? CircularProgressIndicator()
-                                  : Text(
+                                  ? const CircularProgressIndicator()
+                                  : const Text(
                                       "Register"), // Show "Register" button when not loading
                         ),
                       ),
 
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Sudah punya akun? "),
+                          const Text("Sudah punya akun? "),
                           InkWell(
                             onTap: () {
-                              Get.to(() => Login());
+                              Get.to(() => const Login());
                               // Tambahkan kode navigasi ke halaman login di sini
                             },
-                            child: Text(
+                            child: const Text(
                               "Login disini",
                               style: TextStyle(color: Colors.blue),
                             ),

@@ -45,6 +45,7 @@ dependencies:
   qr_flutter: ^4.1.0
   flutter_native_splash: ^2.3.3
   flutter_launcher_icons: ^0.13.1
+  flutter_barcode_scanner: ^2.0.0
 
 flutter_icons:
   android: "launcher_icon"
@@ -53,12 +54,12 @@ flutter_icons:
 
 
 flutter_native_splash:
-    color: "#071b5d"
-    image: assets/splash/logo.jpg
+    color: "#ecf0f1"
+    image: assets/splash/logo.png
     android: true
     ios: true
     image_mode: "centered"  
-    image_size: "50px"  
+    image_size: "500px"  
   
   
 
