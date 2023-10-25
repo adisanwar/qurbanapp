@@ -9,6 +9,7 @@ class RegistrationController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final RxBool isRegistered = false.obs;
+  
 
   Future<void> registerUser(
     
@@ -39,6 +40,7 @@ class RegistrationController extends GetxController {
             'phone': phone,
             'wali': wali, // Add the "wali" field
             'role': 'user',
+            'getqurban' : false,
           });
 
           isRegistered.value = true;

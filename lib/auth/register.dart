@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:qurban_app/auth/login.dart';
 import 'package:qurban_app/helpers/registrationcontroller.dart';
 
-
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -20,7 +19,8 @@ class _RegisterState extends State<Register> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _noKkController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _waliController = TextEditingController();
   final RegistrationController _registrationController =
       Get.put(RegistrationController());
@@ -69,7 +69,6 @@ class _RegisterState extends State<Register> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       const SizedBox(height: 10),
                       Container(
                         width: double.infinity,

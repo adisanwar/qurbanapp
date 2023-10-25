@@ -1,45 +1,29 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
 import 'package:qurban_app/helpers/logincontroller.dart';
+import 'package:qurban_app/models/user_model.dart';
 
 import '../../helpers/usercontroller.dart';
 
 class UserPage extends StatelessWidget {
-  const UserPage({super.key});
+  final String docId;
+  const UserPage({
+    Key? key,
+    required this.docId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());
-    final userData = loginController.userData;
-    final userNow = FirebaseAuth.instance.currentUser;
-
-    // print(userData.value['wali']);
-    // print(userNow);
     final UserController userController = Get.put(UserController());
-    // final userData = loginController.userData;
-    // final currentUser = loginController.currentUser.value;
-    // final userDetail = loginController.fetchUserDetail();
-    
-    final userDetail = userController.currentUser.value;
-    // print(userData!.uid);
-
-    // void getData() {
-    //   _userController.fetchUserData(userId);
-    // }
 
     void logout() {
       loginController.logout();
     }
 
-    @override
-    void initState() {
-      // loginController.getUserData();
-      // getUserData(currentUser!.uid);
-      initState();
-    }
-
+   
     return Scaffold(
       backgroundColor: Colors.blue[800],
       appBar: AppBar(
@@ -104,115 +88,127 @@ class UserPage extends StatelessWidget {
           },
         ),
       ),
-      body: Obx(
-        
-        () => SafeArea(
-          child: Column(children: [
-            Container(
-              // color: Colors.blue,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Stack(
-                  // alignment: Alignment.center,
-                  children: [
-                    Align(
-                      // alignment: Alignment.center,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                50.0), // Sesuaikan radius sudut sesuai kebutuhan
-                            child: Container(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.blue[800],
-                                  size: 40.0,
+      body: FutureBuilder(
+        future: userController.fetchUserDetails(docId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return Center(child: Text('User not found'));
+          } else {
+            final UserModel user = snapshot.data!;
+            return SafeArea(
+            child: Column(children: [
+              Container(
+                // color: Colors.blue,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Stack(
+                    // alignment: Alignment.center,
+                    children: [
+                      Align(
+                        // alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  50.0), // Sesuaikan radius sudut sesuai kebutuhan
+                              child: Container(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.blue[800],
+                                    size: 40.0,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          Text("${userNow!.email}"), // Spasi antara ikon dan teks
-                          // Text(userNow.uid),
-                          // Text("${userData.value['wali']}"),
-                          Text("${userDetail!.email}"),
-                          Text(
-                            "Assalamualaikum ${userData.value['wali']},",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors
-                                  .white, // Sesuaikan warna teks sesuai kebutuhan
-                              fontSize:
-                                  22, // Sesuaikan ukuran teks sesuai kebutuhan
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                              'Silahkan Scan untuk mendapatkan bagian kamu',
+                            const SizedBox(height: 20),
+                            // Text("${userNow!.email}"), // Spasi antara ikon dan teks
+                            // // Text(userNow.uid),
+                            // // Text("${userData.value['wali']}"),
+                            // Text("${userDetail!.email}"),
+                            Text(
+                              "Assalamualaikum ${user.name},",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                                 color: Colors
                                     .white, // Sesuaikan warna teks sesuai kebutuhan
                                 fontSize:
-                                    16, // Sesuaikan ukuran teks sesuai kebutuhan)
-                              ))
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            // Baris kedua dengan latar belakang berwarna merah
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40.0),
-                  topRight: Radius.circular(40.0),
-                ),
-                child: Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (userData.value['no_kk'] != null)
-                          QrImageView(
-                            data:
-                                "${userData.value['no_kk']}", // Use qrCodeData here
-                            version: QrVersions.auto,
-                            size: 350.0,
-                          )
-                        else
-                          const Text(
-                            "Verifikasi Dulu", // Display this text if qrCodeData is null
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24.0,
-                              color: Colors.black,
+                                    22, // Sesuaikan ukuran teks sesuai kebutuhan
+                              ),
                             ),
-                          ),
-                      ],
-                    ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                                'Silahkan Scan untuk mendapatkan bagian kamu',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors
+                                      .white, // Sesuaikan warna teks sesuai kebutuhan
+                                  fontSize:
+                                      16, // Sesuaikan ukuran teks sesuai kebutuhan)
+                                ))
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            )
-          ]),
-        ),
+      
+              const SizedBox(
+                height: 20,
+              ),
+      
+              // Baris kedua dengan latar belakang berwarna merah
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
+                  ),
+                  child: Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (user.nokk != null)
+                            QrImageView(
+                              data:
+                                  "${user.nokk}", // Use qrCodeData here
+                              version: QrVersions.auto,
+                              size: 350.0,
+                            )
+                          else
+                            const Text(
+                              "Verifikasi Dulu", // Display this text if qrCodeData is null
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ]),
+          );
+        }
+        }
       ),
-    );
+      );
+    
   }
 }

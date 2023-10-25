@@ -6,7 +6,7 @@ import 'package:qurban_app/ui/admin/homepage.dart';
 import 'package:qurban_app/ui/user/user.dart';
 
 import '../auth/login.dart';
-
+ 
 class LoginController extends GetxController {
   var isLoggedIn = false.obs;
   var userRole = 'user'.obs;
@@ -39,86 +39,63 @@ class LoginController extends GetxController {
     }
   }
 
+//   Future<String?> getUserDocumentId(String userId) async {
+
   Future<void> login(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+  try {
+    await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 
-      final user = _auth.currentUser;
+    final user = _auth.currentUser;
 
-      if (user != null) {
-        userRole.value = await getUserRole(user.uid);
+    if (user != null) {
+      userRole.value = await getUserRole(user.uid);
 
-        isLoggedIn.value = true;
+      isLoggedIn.value = true;
 
-        // Arahkan pengguna ke halaman yang sesuai
-        if (userRole.value == 'admin') {
-          Get.to(() => const HomePage());
-        } else {
-          Get.to(() => const UserPage());
-        }
+      // Arahkan pengguna ke halaman yang sesuai
+      if (userRole.value == 'admin') {
+        Get.to(() => HomePage(docId: user.uid));
+      } else {
+        Get.to(() => UserPage(docId: user.uid));
       }
-    } catch (e) {
-      print(e);
+    }
+  } catch (e) {
+    print(e);
 
-      if (e is FirebaseAuthException) {
-        // Jika kesalahan adalah jenis FirebaseAuthException, kita dapat memeriksa kode kesalahan.
-        if (e.code == 'user-not-found') {
-          // Email tidak ditemukan
-          Get.snackbar(
-            'Login Gagal',
-            'Email tidak terdaftar',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        } else if (e.code == 'wrong-password') {
-          // Password salah
-          Get.snackbar(
-            'Login Gagal',
-            'Password salah',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        } else {
-          // Kesalahan lain
-          Get.snackbar(
-            'Login Gagal',
-            'Terjadi kesalahan saat login',
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        }
-      } 
+    if (e is FirebaseAuthException) {
+      // Jika kesalahan adalah jenis FirebaseAuthException, kita dapat memeriksa kode kesalahan.
+      if (e.code == 'user-not-found') {
+        // Email tidak ditemukan
+        Get.snackbar(
+          'Login Gagal',
+          'Email tidak terdaftar',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      } else if (e.code == 'wrong-password') {
+        // Password salah
+        Get.snackbar(
+          'Login Gagal',
+          'Password salah',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      } else {
+        // Kesalahan lain
+        Get.snackbar(
+          'Login Gagal',
+          'Terjadi kesalahan saat login',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     }
   }
+}
 
-  // Fungsi untuk mengambil detail pengguna dari currentUser
-  Future<void> fetchUserDetail() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        // userDetail.value = user;
-        final userDocId = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-        userData.value = userDocId.data() ?? {};
-
-        if (userDocId.exists) {
-          Map<String, dynamic> userDataMap = userDocId.data() ?? {};
-          // Jika dokumen pengguna dengan id yang sesuai ditemukan
-          userData.value = userDocId['wali'];
-          userData.value = userDocId['no_kk'];
-
-          userData.value = userDataMap;
-        }
-      }
-    } catch (e) {
-      print("Fetch User Data Error: $e");
-    }
-  }
 
   Future<void> logout() async {
     try {
