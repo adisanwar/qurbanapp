@@ -92,11 +92,11 @@ class UserPage extends StatelessWidget {
         future: userController.fetchUserDetails(docId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('User not found'));
+            return const Center(child: Text('User not found'));
           } else {
             final UserModel user = snapshot.data!;
             return SafeArea(
@@ -181,22 +181,12 @@ class UserPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (user.nokk != null)
-                            QrImageView(
-                              data:
-                                  "${user.nokk}", // Use qrCodeData here
-                              version: QrVersions.auto,
-                              size: 350.0,
-                            )
-                          else
-                            const Text(
-                              "Verifikasi Dulu", // Display this text if qrCodeData is null
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24.0,
-                                color: Colors.black,
-                              ),
-                            ),
+                          QrImageView(
+                            data:
+                                user.nokk, // Use qrCodeData here
+                            version: QrVersions.auto,
+                            size: 350.0,
+                          ),
                         ],
                       ),
                     ),

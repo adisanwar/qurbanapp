@@ -22,6 +22,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _waliController = TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
   final RegistrationController _registrationController =
       Get.put(RegistrationController());
 
@@ -37,6 +38,7 @@ class _RegisterState extends State<Register> {
   // String _password = "";
 
   void _handleRegister() async {
+    _roleController.text = 'user';
     // Call the registerUser method from the RegistrationController
     _registrationController.registerUser(
       _emailController.text,
@@ -44,6 +46,7 @@ class _RegisterState extends State<Register> {
       _noKkController.text,
       _phoneController.text,
       _waliController.text,
+      _roleController.text
     );
   }
 

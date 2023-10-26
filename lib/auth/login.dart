@@ -255,25 +255,21 @@ late String email, password, role;
                   SizedBox(
                     width: double.infinity,
                     height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _handleLogin();
-                        // if (_formkey.currentState!.validate()) {
-                        //   _formkey.currentState!.save();
-                        // }
-                        // Aksi ketika tombol ditekan
-                      },
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                30.0), // Sesuaikan radius sesuai kebutuhan
-                          ),
-                        ),
-                      ),
-                      child: const Text("Login"),
-                    ),
+                    child: ElevatedButton.icon(
+  onPressed: () {
+    _handleLogin(); // Fungsi untuk melakukan login
+  },
+  style: ButtonStyle(
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0), // Sesuaikan radius sesuai kebutuhan
+      ),
+    ),
+  ),
+  icon: Icon(Icons.login), // Ikon default sebelum diklik
+  label: Text("Login"),
+),
+
                   ),
                   const SizedBox(
                     height: 12,

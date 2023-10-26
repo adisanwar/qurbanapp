@@ -59,5 +59,48 @@ class UserController extends GetxController {
       throw Exception('Error updating user data: $e');
     }
   }
-}
 
+//   Future<void> updateEmailVerificationStatus(userId) async {
+//   try {
+//     User? user = FirebaseAuth.instance.currentUser;
+
+//     if (user != null) {
+//       // Ambil UID pengguna Firebase
+//       userId = user.uid;
+
+//       // Mencari dokumen dengan UID pengguna Firebase sebagai referensi
+//       QuerySnapshot userQuery = await FirebaseFirestore.instance
+//           .collection('users')
+//           .where('uid', isEqualTo: userId)
+//           .get();
+
+//       if (userQuery.docs.isNotEmpty) {
+//         // Dokumen pengguna ditemukan
+//         final userDoc = userQuery.docs[0];
+        
+//         // Mengubah status email verifikasi menjadi true dalam dokumen Firestore
+//         await userDoc.reference.update({'emailVerified': true});
+
+//         // Refresh pengguna untuk mendapatkan data yang diperbarui
+//         await user.reload();
+//         user = FirebaseAuth.instance.currentUser;
+
+//         if (user!.emailVerified) {
+//           print('Status verifikasi email telah diperbarui menjadi true dalam Firestore.');
+//         } else {
+//           print('Gagal memperbarui status verifikasi email dalam Firestore.');
+//         }
+//       } else {
+//         print('Dokumen pengguna tidak ditemukan dalam Firestore.');
+//       }
+//     } else {
+//       print('Pengguna tidak ditemukan.');
+//     }
+//   } catch (e) {
+//     print('Error updating email verification status: $e');
+//   }
+
+
+// }
+
+}

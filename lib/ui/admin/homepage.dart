@@ -1,15 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
+import 'package:qurban_app/helpers/adminController.dart';
 
 import 'package:qurban_app/helpers/logincontroller.dart';
 
 import '../../helpers/usercontroller.dart';
 import '../../models/user_model.dart';
-import 'screen/activeUser.dart';
+import 'screen/userControl.dart';
 import 'screen/confirmUser.dart';
 import 'screen/resultQurban.dart';
 
@@ -24,53 +22,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());
     final UserController userController = Get.put(UserController());
-
-   Future<void> scanQR() async {
-  String barcodeScanRes;
-  try {
-    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#ff5722', 'Cancel', true, ScanMode.QR);
-    debugPrint(barcodeScanRes);
-  } on PlatformException {
-    barcodeScanRes = 'Failed to get Platform version';
-  }
-
-  Get.snackbar("Barcode", barcodeScanRes);
-
-   // Check if the scanned QR code matches a user's nokk
-  // if (barcodeScanRes.isNotEmpty) {
-  //   final QuerySnapshot userQuery = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .where('no_kk', isEqualTo: barcodeScanRes)
-  //       .get();
-
-  //   if (userQuery.docs.isNotEmpty) {
-  //     // Get the first document matching the nokk
-  //     final userDoc = userQuery.docs[0];
-
-  //     // Convert QueryDocumentSnapshot to DocumentSnapshot<Map<String, dynamic>>
-  //     final userDocData = userDoc.data() as Map<String, dynamic>;
-
-  //     // Create a DocumentSnapshot from the data
-  //     final userDocumentSnapshot = DocumentSnapshot<Map<String, dynamic>>(
-  //       data: userDocData,
-  //       metadata: userDoc.metadata,
-  //       reference: userDoc.reference,
-  //     );
-
-  //     // Call the controller function to mark the user as qurban
-  //     await userController.markUserAsQurban(UserModel.fromSnapshot(userDocumentSnapshot));
-
-  //     // Display a message to indicate success
-  //     Get.snackbar("Success", "User marked as qurban");
-  //   } else {
-  //     // Display an error message if the user is not found
-  //     Get.snackbar("Error", "User not found");
-  //   }
-  // }
- 
-}
-    
+    final AdminController adminController = Get.put(AdminController());    
     void logout() {
       loginController.logout();
     }
@@ -79,11 +31,11 @@ class HomePage extends StatelessWidget {
       future: userController.fetchUserDetails(docId),
       builder: (context, snapshot) { 
       if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('User not found'));
+            return const Center(child: Text('User not found'));
           } else {
             final UserModel? user = snapshot.data;
             return
@@ -186,7 +138,7 @@ class HomePage extends StatelessWidget {
                           Text(
                             "Assalamualaikum Admin Ganteng Alias ${user!.name},",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors
                                   .white, // Sesuaikan warna teks sesuai kebutuhan
@@ -225,7 +177,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                Get.to(() => const ActiveUser());
+                                Get.to(() => const UserControl());
                                 // Fungsi yang akan dijalankan ketika ikon pertama ditekan
                               },
                               child: Container(
@@ -235,7 +187,7 @@ class HomePage extends StatelessWidget {
                                 ),
                                 padding: const EdgeInsets.all(10.0),
                                 child: const Icon(
-                                  Icons.person_add,
+                                  Icons.person_search,
                                   size: 120.0,
                                   color: Colors.white,
                                 ),
@@ -270,7 +222,7 @@ class HomePage extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                scanQR();
+                                adminController.scanQR();
                                 // Fungsi yang akan dijalankan ketika ikon pertama ditekan
                               },
                               child: Container(

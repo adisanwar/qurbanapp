@@ -56,7 +56,7 @@ class LoginController extends GetxController {
       isLoggedIn.value = true;
 
       // Arahkan pengguna ke halaman yang sesuai
-      if (userRole.value == 'admin') {
+      if (userRole.value == 'admin' || userRole.value == 'Admin') {
         Get.to(() => HomePage(docId: user.uid));
       } else {
         Get.to(() => UserPage(docId: user.uid));
