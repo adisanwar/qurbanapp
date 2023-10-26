@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:qurban_app/auth/register.dart';
 import 'package:qurban_app/helpers/logincontroller.dart';
 
@@ -14,8 +13,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-   TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final LoginController _loginController =
       Get.put(LoginController());
 final _formkey = GlobalKey<FormState>();
@@ -37,18 +36,18 @@ late String email, password, role;
     return Scaffold(
       body: Center(
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 32),
+          margin: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Let's go!",
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Column(
@@ -73,15 +72,15 @@ late String email, password, role;
                       decoration: InputDecoration(
                         hintText:
                             "Masukan Email", // Add a space as a placeholder for the hint text
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: const Icon(Icons.person),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.grey,
                           ), // Gray border when focused
                           borderRadius: BorderRadius.circular(20),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.grey,
                           ), // Gray border when enabled
                           borderRadius: BorderRadius.circular(20),
@@ -100,7 +99,7 @@ late String email, password, role;
                   //       fontSize: 12,
                   //       fontWeight: FontWeight.bold,
                   //     )),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
 
@@ -115,7 +114,7 @@ late String email, password, role;
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: "Password",
-                        prefixIcon: Icon(Icons.lock),
+                        prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(isPasswordVisible
                               ? Icons.visibility
@@ -127,13 +126,13 @@ late String email, password, role;
                           },
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.grey,
                           ), // Gray border when focused
                           borderRadius: BorderRadius.circular(20),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.grey,
                           ), // Gray border when enabled
                           borderRadius: BorderRadius.circular(20),
@@ -153,15 +152,15 @@ late String email, password, role;
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             builder: (context) => Container(
-                              padding: EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
                               child: Column(
                                 children: [
-                                  Padding(padding: EdgeInsets.all(10)),
-                                  Text("Reset Password",
+                                  const Padding(padding: EdgeInsets.all(10)),
+                                  const Text("Reset Password",
                                       style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold)),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Container(
@@ -172,16 +171,16 @@ late String email, password, role;
                                       decoration: InputDecoration(
                                         hintText:
                                             "Masukan No Handphone", // Add a space as a placeholder for the hint text
-                                        prefixIcon: Icon(Icons.phone),
+                                        prefixIcon: const Icon(Icons.phone),
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                             color: Colors.grey,
                                           ), // Gray border when focused
                                           borderRadius:
                                               BorderRadius.circular(20),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
+                                          borderSide: const BorderSide(
                                             color: Colors.grey,
                                           ), // Gray border when enabled
                                           borderRadius:
@@ -200,13 +199,13 @@ late String email, password, role;
                                       maxLines: 1, // Tetapkan maxLines ke 1
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 50,
                                           child: ElevatedButton(
                                             onPressed: () {
@@ -222,7 +221,7 @@ late String email, password, role;
                                                 ),
                                               ),
                                             ),
-                                            child: Text("Reset Password"),
+                                            child: const Text("Reset Password"),
                                           ),
                                         ),
                                       ),
@@ -235,7 +234,7 @@ late String email, password, role;
                             ),
                           );
                         },
-                        child: Column(
+                        child: const Column(
                           children: [
                             Text(
                               "Lupa Password",
@@ -253,41 +252,37 @@ late String email, password, role;
                   ),
                   
 
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _handleLogin();
-                        // if (_formkey.currentState!.validate()) {
-                        //   _formkey.currentState!.save();
-                        // }
-                        // Aksi ketika tombol ditekan
-                      },
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                15.0), // Sesuaikan radius sesuai kebutuhan
-                          ),
-                        ),
-                      ),
-                      child: Text("Login"),
-                    ),
+                    child: ElevatedButton.icon(
+  onPressed: () {
+    _handleLogin(); // Fungsi untuk melakukan login
+  },
+  style: ButtonStyle(
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0), // Sesuaikan radius sesuai kebutuhan
+      ),
+    ),
+  ),
+  icon: Icon(Icons.login), // Ikon default sebelum diklik
+  label: Text("Login"),
+),
+
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Belum punya Akun? "),
+                      const Text("Belum punya Akun? "),
                       InkWell(
                         onTap: () {
                           Get.to(() =>const Register());
                         },
-                        child: Text(
+                        child: const Text(
                           "Daftar dulu Bro!",
                           style: TextStyle(color: Colors.blue),
                         ),

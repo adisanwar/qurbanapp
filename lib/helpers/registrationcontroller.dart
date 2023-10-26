@@ -1,29 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:qurban_app/ui/login.dart';
+import 'package:qurban_app/auth/login.dart';
+
 
 class RegistrationController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final RxBool isRegistered = false.obs;
+  
 
   Future<void> registerUser(
     
-      String email, String password, String no_kk, String phone, String wali) async {
+      String email, String password, String noKk, String phone, String wali, String role) async {
     try {
       print('Email: $email');
     print('Password: $password');
-    print('No KK: $no_kk');
+    print('No KK: $noKk');
     print('Phone: $phone');
     print('Wali: $wali');
       final emailExists = await _checkEmailExists(email);
       final phoneExists = await _checkPhoneExists(phone);
-      final no_kkExists = await _checkno_kkExists(no_kk);
+      final noKkexists = await _checkno_kkExists(noKk);
       final waliExists = await _checkWaliExists(wali);
 
-      if (emailExists || phoneExists || no_kkExists || waliExists) {
+      if (emailExists || phoneExists || noKkexists || waliExists) {
         Get.snackbar("Error", "Email, phone, no KK, or wali is already in use");
       } else {
         UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -34,14 +36,15 @@ class RegistrationController extends GetxController {
         if (userCredential.user != null) {
           // Store additional user data in Firestore
           await _firestore.collection('users').doc(userCredential.user!.uid).set({
-            'no_kk': no_kk,
+            'no_kk': noKk,
             'phone': phone,
             'wali': wali, // Add the "wali" field
-            'role': 'user',
+            'role': role,
+            'getqurban' : false,
           });
 
           isRegistered.value = true;
-          Get.to(() => Login());
+          Get.to(() => const Login());
           Get.snackbar("Success", "Pendaftaran Berhasil Silahkan Login");
         }
       }
@@ -69,10 +72,10 @@ class RegistrationController extends GetxController {
     return result.docs.isNotEmpty;
   }
 
-  Future<bool> _checkno_kkExists(String no_kk) async {
+  Future<bool> _checkno_kkExists(String noKk) async {
     QuerySnapshot result = await _firestore
         .collection('users')
-        .where('no_kk', isEqualTo: no_kk)
+        .where('no_kk', isEqualTo: noKk)
         .get();
 
     return result.docs.isNotEmpty;
