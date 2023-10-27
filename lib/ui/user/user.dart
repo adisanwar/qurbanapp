@@ -23,7 +23,6 @@ class UserPage extends StatelessWidget {
       loginController.logout();
     }
 
-   
     return Scaffold(
       backgroundColor: Colors.blue[800],
       appBar: AppBar(
@@ -88,117 +87,143 @@ class UserPage extends StatelessWidget {
           },
         ),
       ),
-      body: FutureBuilder(
-        future: userController.fetchUserDetails(docId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return const Center(child: Text('User not found'));
-          } else {
-            final UserModel user = snapshot.data!;
-            return SafeArea(
-            child: Column(children: [
-              Container(
-                // color: Colors.blue,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Stack(
-                    // alignment: Alignment.center,
-                    children: [
-                      Align(
+      body: StreamBuilder(
+          stream: userController.streamUserDetails(docId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData) {
+              return const Center(child: Text('User not found'));
+            } else {
+              final UserModel user = snapshot.data!;
+              return SafeArea(
+                child: Column(children: [
+                  Container(
+                    // color: Colors.blue,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Stack(
                         // alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                  50.0), // Sesuaikan radius sudut sesuai kebutuhan
-                              child: Container(
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Icon(
-                                    Icons.person,
-                                    color: Colors.blue[800],
-                                    size: 40.0,
+                        children: [
+                          Align(
+                            // alignment: Alignment.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      50.0), // Sesuaikan radius sudut sesuai kebutuhan
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.blue[800],
+                                        size: 40.0,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(height: 20),
+                                // Text("${userNow!.email}"), // Spasi antara ikon dan teks
+                                // // Text(userNow.uid),
+                                // // Text("${userData.value['wali']}"),
+                                // Text("${userDetail!.email}"),
+                                Text(
+                                  "Assalamualaikum ${user.name},",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors
+                                        .white, // Sesuaikan warna teks sesuai kebutuhan
+                                    fontSize:
+                                        22, // Sesuaikan ukuran teks sesuai kebutuhan
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Text(
+                                    'Silahkan Scan untuk mendapatkan bagian kamu',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors
+                                          .white, // Sesuaikan warna teks sesuai kebutuhan
+                                      fontSize:
+                                          16, // Sesuaikan ukuran teks sesuai kebutuhan)
+                                    ))
+                              ],
                             ),
-                            const SizedBox(height: 20),
-                            // Text("${userNow!.email}"), // Spasi antara ikon dan teks
-                            // // Text(userNow.uid),
-                            // // Text("${userData.value['wali']}"),
-                            // Text("${userDetail!.email}"),
-                            Text(
-                              "Assalamualaikum ${user.name},",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors
-                                    .white, // Sesuaikan warna teks sesuai kebutuhan
-                                fontSize:
-                                    22, // Sesuaikan ukuran teks sesuai kebutuhan
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(
-                                'Silahkan Scan untuk mendapatkan bagian kamu',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors
-                                      .white, // Sesuaikan warna teks sesuai kebutuhan
-                                  fontSize:
-                                      16, // Sesuaikan ukuran teks sesuai kebutuhan)
-                                ))
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-      
-              const SizedBox(
-                height: 20,
-              ),
-      
-              // Baris kedua dengan latar belakang berwarna merah
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
-                  ),
-                  child: Container(
-                    color: Colors.white,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          QrImageView(
-                            data:
-                                user.nokk, // Use qrCodeData here
-                            version: QrVersions.auto,
-                            size: 350.0,
                           ),
                         ],
                       ),
                     ),
                   ),
-                ),
-              )
-            ]),
-          );
-        }
-        }
-      ),
-      );
-    
+
+                  const SizedBox(
+                    height: 40,
+                  ),
+
+                  // Baris kedua dengan latar belakang berwarna merah
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                        topRight: Radius.circular(40.0),
+                      ),
+                      child: Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  !user.verifByAdmin
+                                      ? Text(
+                                        'Akun Anda Belum diverifikasi Admin\n \nSilahkan Verifikasi dengan membawa atau menunjukan Kartu Keluarga'
+                                          ,
+                                          style: TextStyle(
+                                            
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : (!user.getqurban)
+                                          ? Text(
+                                            'Anda Sudah Menerima Qurban'
+                                              ,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            )
+                                          : QrImageView(
+                                              data: user
+                                                  .nokk, // Use qrCodeData here
+                                              version: QrVersions.auto,
+                                              size: 350.0,
+                                            ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ]),
+              );
+            }
+          }),
+    );
   }
 }

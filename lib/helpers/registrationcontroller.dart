@@ -33,6 +33,30 @@ class RegistrationController extends GetxController {
           password: password,
         );
 
+        try {
+          await FirebaseAuth.instance.verifyPhoneNumber(
+            phoneNumber: phone,
+            verificationCompleted: (PhoneAuthCredential credential) async {
+              // Tidak digunakan dalam kasus ini karena tidak ada verifikasi otomatis.
+            },
+            verificationFailed: (FirebaseAuthException e) {
+              print('Verifikasi gagal: $e');
+            },
+            codeSent: (String verificationId, int? resendToken) async {
+              // Tidak digunakan dalam kasus ini karena tidak ada kode verifikasi otomatis.
+              // Anda bisa menyimpan verificationId dan resendToken untuk digunakan nanti, atau abaikan saja.
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {
+              // Tidak digunakan dalam kasus ini karena tidak ada verifikasi otomatis.
+            },
+          );
+
+          // Jika Anda tidak ingin menggunakan kode verifikasi, Anda dapat mendaftarkan pengguna langsung di sini
+          // Disini Anda dapat melanjutkan dengan tindakan lain yang diperlukan setelah mendaftarkan nomor telepon.
+        } catch (e) {
+          print('Error: $e');
+        }
+
         if (userCredential.user != null) {
           // Store additional user data in Firestore
           await _firestore.collection('users').doc(userCredential.user!.uid).set({
@@ -41,6 +65,7 @@ class RegistrationController extends GetxController {
             'wali': wali, // Add the "wali" field
             'role': role,
             'getqurban' : false,
+            'verifByAdmin' : false
           });
 
           isRegistered.value = true;

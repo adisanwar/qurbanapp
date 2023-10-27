@@ -6,7 +6,7 @@ import 'package:qurban_app/ui/admin/homepage.dart';
 import 'package:qurban_app/ui/user/user.dart';
 
 import '../auth/login.dart';
- 
+
 class LoginController extends GetxController {
   var isLoggedIn = false.obs;
   var userRole = 'user'.obs;
@@ -17,7 +17,7 @@ class LoginController extends GetxController {
   // Rx<User?> currentUser = Rx<User?>();
   // final RxString userData = ''.obs;
   Rx<User?> currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
-  
+
   // final RxString no_kk = ''.obs;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,60 +42,72 @@ class LoginController extends GetxController {
 //   Future<String?> getUserDocumentId(String userId) async {
 
   Future<void> login(String email, String password) async {
-  try {
-    await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final user = _auth.currentUser;
+      final user = _auth.currentUser;
 
-    if (user != null) {
-      userRole.value = await getUserRole(user.uid);
+      if (user != null) {
+        userRole.value = await getUserRole(user.uid);
 
-      isLoggedIn.value = true;
+        isLoggedIn.value = true;
 
-      // Arahkan pengguna ke halaman yang sesuai
-      if (userRole.value == 'admin' || userRole.value == 'Admin') {
-        Get.to(() => HomePage(docId: user.uid));
-      } else {
-        Get.to(() => UserPage(docId: user.uid));
+        // Arahkan pengguna ke halaman yang sesuai
+        if (userRole.value == 'admin' || userRole.value == 'Admin') {
+          Get.to(() => HomePage(docId: user.uid));
+        } else {
+          Get.to(() => UserPage(docId: user.uid));
+        }
       }
-    }
-  } catch (e) {
-    print(e);
+    } catch (e) {
+      print(e);
 
-    if (e is FirebaseAuthException) {
-      // Jika kesalahan adalah jenis FirebaseAuthException, kita dapat memeriksa kode kesalahan.
-      if (e.code == 'user-not-found') {
-        // Email tidak ditemukan
-        Get.snackbar(
-          'Login Gagal',
-          'Email tidak terdaftar',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      } else if (e.code == 'wrong-password') {
-        // Password salah
-        Get.snackbar(
-          'Login Gagal',
-          'Password salah',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      } else {
-        // Kesalahan lain
-        Get.snackbar(
-          'Login Gagal',
-          'Terjadi kesalahan saat login',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+      if (e is FirebaseAuthException) {
+        // Jika kesalahan adalah jenis FirebaseAuthException, kita dapat memeriksa kode kesalahan.
+        if (e.code == 'user-not-found') {
+          // Email tidak ditemukan
+          Get.snackbar(
+            'Login Gagal',
+            'Email tidak terdaftar',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        } else if (e.code == 'wrong-password') {
+          // Password salah
+          Get.snackbar(
+            'Login Gagal',
+            'Password salah',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        } else {
+          // Kesalahan lain
+          Get.snackbar(
+            'Login Gagal',
+            'Terjadi kesalahan saat login',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
       }
     }
   }
-}
 
+  Future<void> resetPasswordByemail(BuildContext context, String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar('Success', 'Password Reset Dikirim');
+      
+      Get.to(() => Login());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      Get.snackbar('Error', '${e.message}');
+      Navigator.of(context).pop();
+    }
+  }
 
   Future<void> logout() async {
     try {

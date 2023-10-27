@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qurban_app/auth/addUser.dart';
+import 'package:qurban_app/helpers/adminController.dart';
 import 'package:qurban_app/helpers/usercontroller.dart';
+import 'package:qurban_app/ui/admin/screen/addUser.dart';
+import 'package:qurban_app/ui/admin/screen/editUser.dart';
 
 class UserControl extends StatelessWidget {
   const UserControl({super.key});
@@ -11,54 +13,10 @@ class UserControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserController userController = Get.put(UserController());
-    final bool verifikasiUser =
-        FirebaseAuth.instance.currentUser!.emailVerified;
+    final AdminController adminController = Get.put(AdminController());
+    
 
     User? user = FirebaseAuth.instance.currentUser;
-
-    // Future<void> deleteUserAndDocument(idUser) async {
-    //   final FirebaseAuth auth = FirebaseAuth.instance;
-    //   final User? user = auth.currentUser;
-
-    //   if (user != null) {
-    //     // Mendapatkan UID pengguna
-    //     final String userId = user.uid;
-
-    //     if (userId == idUser) {
-    //       // Menghapus dokumen pengguna dari Firestore
-    //       final CollectionReference usersCollection =
-    //           FirebaseFirestore.instance.collection('users');
-    //       await usersCollection.doc(userId).delete();
-
-    //       // Menghapus pengguna dari Firebase Authentication
-    //       await user.delete();
-
-    //       print('Pengguna dan dokumen telah dihapus.');
-    //     } else {
-    //       print(
-    //           'UID pengguna tidak sesuai dengan user.id. Tindakan dibatalkan.');
-    //     }
-    //   } else {
-    //     print('Tidak ada pengguna yang masuk.');
-    //   }
-    // }
-
-    Future<void> deleteUserData(String docId) async {
-  try {
-    // Hapus dokumen pengguna berdasarkan docId
-    String userId = docId;
-    
-    await FirebaseFirestore.instance.collection('users').doc(docId).delete();
-
-    // Hapus akun pengguna dari Firebase Authentication
-    await FirebaseAuth.instance.currentUser!.delete();
-
-    print('User dengan docId $docId berhasil dihapus');
-  } catch (e) {
-    throw Exception('Error deleting user and data: $e');
-  }
-}
-
 
 // Create a local variable isOnline based on the user's login status
     bool isOnline = user != null;
@@ -72,7 +30,8 @@ class UserControl extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-          title: const Text('User Control'), backgroundColor: Colors.blue),
+        
+          title: const Text('User Control'), backgroundColor: Colors.blue[800]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(() => AddUser());
@@ -80,8 +39,8 @@ class UserControl extends StatelessWidget {
         },
         child: const Icon(Icons.add), // Ganti ikon dengan ikon yang sesuai
       ),
-      body: FutureBuilder(
-          future: userController.allUsers(),
+      body: StreamBuilder(
+          stream: adminController.allUsers(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -110,15 +69,20 @@ class UserControl extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             InkWell(
-                                child: verifikasiUser
-                                    ? IconButton(
-                                        icon: const Icon(Icons.check,
-                                            color: Colors.green),
-                                        iconSize: 30,
-                                        onPressed: () {
-                                          // Aksi yang akan diambil saat tombol Edit ditekan
-                                        },
-                                      )
+                                child: user.verifByAdmin
+                                    ? Opacity(
+                                      opacity: 0,
+                                      child: IconButton(
+                                          icon: const Icon(Icons.check,
+                                              color: Colors.green),
+                                          iconSize: 30,
+                                          
+                                          onPressed: () {
+                                    
+                                            // Aksi yang akan diambil saat tombol Edit ditekan
+                                          },
+                                        ),
+                                    )
                                     : GestureDetector(
                                         onTap: () {
                                           showDialog(
@@ -128,7 +92,7 @@ class UserControl extends StatelessWidget {
                                               return AlertDialog(
                                                 title: Text('Verifikasi'),
                                                 content: Text(
-                                                    'Apakah Anda yakin ingin verifikasi user${user.name} dengan no KK ${user.nokk}  ${user.id} ?'),
+                                                    'Apakah Anda yakin ingin verifikasi user${user.name} dengan no KK ${user.nokk}?'),
                                                 actions: [
                                                   ElevatedButton(
                                                     child: Text('Batal'),
@@ -155,6 +119,9 @@ class UserControl extends StatelessWidget {
                                                   ElevatedButton(
                                                     child: Text('Verifikasi'),
                                                     onPressed: () {
+                                                      String noKk = user.nokk;
+                                                     adminController.updateVerifByAdmin(noKk);
+                                                     Navigator.of(context).pop();
                                                       // Tindakan yang ingin Anda lakukan saat teks diverifikasi
                                                       // Misalnya, simpan status verifikasi, dll.
                                                       // userController.updateEmailVerificationStatus(user.id);
@@ -189,6 +156,7 @@ class UserControl extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.green),
                               onPressed: () {
+                                Get.to(()=>EditUser());
                                 // Aksi yang akan diambil saat tombol Edit ditekan
                               },
                             ),
@@ -205,22 +173,28 @@ class UserControl extends StatelessWidget {
                                           AlertDialog(
                                             title: Text('Hapus'),
                                             content: Text(
-                                                'Yakin Ingin Menghapus ${user.name} ${user.id} ?'),
+                                                'Yakin Ingin Menghapus ${user.name}?'),
                                             actions: [
                                               ElevatedButton(
                                                 child: Text('Hapus'),
                                                 onPressed: () {
-                                                  String userNow  =  FirebaseAuth.instance.currentUser!.uid;
+                                                  // String userNow  =  FirebaseAuth.instance.currentUser!.uid;
                                                   String? userId = user.id;
-                                                  print("akun : ${userNow}");
+                                                  String? name = user.name;
+                                                  // print("akun : ${userNow}");
                                                   print("docID : ${userId} ");
                                                   try {
-                                                    // deleteUserData(userId!);
-                                                    print('user berhasil diihapus');
+                                                    adminController
+                                                        .deleteUserData(
+                                                            userId!, name);
+                                                    Navigator.of(context).pop();
+                                                    Get.to(() => UserControl());
+                                                    // Tambahkan logika lain yang perlu dilakukan jika penghapusan berhasil
                                                   } catch (e) {
-                                                    
+                                                    print(
+                                                        'Terjadi kesalahan saat menghapus data: $e');
+                                                    // Tambahkan penanganan kesalahan sesuai kebutuhan Anda, misalnya menampilkan pesan kesalahan kepada pengguna
                                                   }
-                                                  
                                                 },
                                                 style: ButtonStyle(
                                                   backgroundColor:
@@ -263,8 +237,8 @@ class UserControl extends StatelessWidget {
                             ),
                             Center(
                               child: Icon(
-                                isOnline ? Icons.circle : Icons.circle,
-                                color: isOnline ? Colors.green : Colors.grey,
+                                user.verifByAdmin ? Icons.circle : Icons.circle,
+                                color:  user.verifByAdmin ? Colors.green : Colors.grey,
                                 size: 15, // Adjust the size as needed
                               ),
                             )

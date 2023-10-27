@@ -104,58 +104,74 @@ class HomePage extends StatelessWidget {
                 }
               },
             ),
+      
           ),
           body: SafeArea(
+              
               child: Column(children: [
-            Container(
-              // color: Colors.blue,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Stack(
-                  // alignment: Alignment.center,
-                  children: [
-                    Align(
-                      // alignment: Alignment.center,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                50.0), // Sesuaikan radius sudut sesuai kebutuhan
-                            child: Container(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.blue[800],
-                                  size: 40.0,
+            SingleChildScrollView(
+              child: Container(
+                
+                // color: Colors.blue,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Stack(
+                    // alignment: Alignment.center,
+                    children: [
+                      Align(
+                        // alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  50.0), // Sesuaikan radius sudut sesuai kebutuhan
+                              child: Container(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.blue[800],
+                                    size: 40.0,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),                     
-                          Text(
-                            "Assalamualaikum Admin Ganteng Alias ${user!.name},",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors
-                                  .white, // Sesuaikan warna teks sesuai kebutuhan
-                              fontSize:
-                                  22, // Sesuaikan ukuran teks sesuai kebutuhan
+                            const SizedBox(height: 20),                     
+                            Text(
+                              "Assalamualaikum ${user!.name},",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors
+                                    .white, // Sesuaikan warna teks sesuai kebutuhan
+                                fontSize:
+                                    22, // Sesuaikan ukuran teks sesuai kebutuhan
+                              ),
                             ),
-                          ),
-                        ],
+                            Text(
+                              "Have a nice Day and Always Grateful",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors
+                                    .white, // Sesuaikan warna teks sesuai kebutuhan
+                                fontSize:
+                                    22, // Sesuaikan ukuran teks sesuai kebutuhan
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
           
             // Baris kedua dengan latar belakang berwarna merah
@@ -205,7 +221,7 @@ class HomePage extends StatelessWidget {
                                 ),
                                 padding: const EdgeInsets.all(10.0),
                                 child: const Icon(
-                                  Icons.create,
+                                  Icons.list,
                                   size: 120.0,
                                   color: Colors.white,
                                 ),
@@ -240,7 +256,9 @@ class HomePage extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.to(() => const ResultQurban());
+                                adminController.getPdf();
+                                
+                                // Get.to(() => const ResultQurban());
                                 // Fungsi yang akan dijalankan ketika ikon pertama ditekan
                               },
                               child: Container(
@@ -250,7 +268,7 @@ class HomePage extends StatelessWidget {
                                 ),
                                 padding: const EdgeInsets.all(10.0),
                                 child: const Icon(
-                                  Icons.file_download,
+                                  Icons.picture_as_pdf,
                                   size: 120.0,
                                   color: Colors.white,
                                 ),

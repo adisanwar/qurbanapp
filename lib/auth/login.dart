@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:qurban_app/auth/register.dart';
 import 'package:qurban_app/helpers/logincontroller.dart';
 
-
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -13,24 +12,22 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailReset = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final LoginController _loginController =
-      Get.put(LoginController());
-final _formkey = GlobalKey<FormState>();
-void _handleLogin() async {
+  final LoginController _loginController = Get.put(LoginController());
+  final _formkey = GlobalKey<FormState>();
+  void _handleLogin() async {
     // Call the registerUser method from the RegistrationController
     _loginController.login(
-     
       _emailController.text,
       _passwordController.text,
-      
     );
   }
 
-late String email, password, role;
+  late String email, password, role;
   bool isPasswordVisible = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +86,6 @@ late String email, password, role;
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                       ),
                     ),
-                    
                   ),
                   // SizedBox(
                   //   height: 12,
@@ -141,7 +137,7 @@ late String email, password, role;
                       ),
                     ),
                   ),
-                  
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -167,11 +163,12 @@ late String email, password, role;
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: TextField(
+                                    child: TextFormField(
+                                      controller: _emailReset,
                                       decoration: InputDecoration(
                                         hintText:
-                                            "Masukan No Handphone", // Add a space as a placeholder for the hint text
-                                        prefixIcon: const Icon(Icons.phone),
+                                            "Masukan Email", // Add a space as a placeholder for the hint text
+                                        prefixIcon: const Icon(Icons.email),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(
                                             color: Colors.grey,
@@ -190,17 +187,17 @@ late String email, password, role;
                                         floatingLabelBehavior:
                                             FloatingLabelBehavior.always,
                                       ),
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      maxLength:
-                                          12, // Batasi input hingga 12 karakter
-                                      maxLines: 1, // Tetapkan maxLines ke 1
+                                      // keyboardType: TextInputType.emailAddress,
+                                      // inputFormatters: <TextInputFormatter>[
+                                      //   FilteringTextInputFormatter.em,
+                                      // ],
+                                      // maxLength:
+                                      //     12, // Batasi input hingga 12 karakter
+                                      // maxLines: 1, // Tetapkan maxLines ke 1
                                     ),
                                   ),
                                   const SizedBox(
-                                    height: 10,
+                                    height: 20,
                                   ),
                                   Row(
                                     children: [
@@ -208,8 +205,17 @@ late String email, password, role;
                                         child: SizedBox(
                                           height: 50,
                                           child: ElevatedButton(
-                                            onPressed: () {
-                                              // Add your onPressed function here
+                                            onPressed: () async {
+                                              email = _emailReset.text;
+                                              try {
+                                                await _loginController
+                                                    .resetPasswordByemail(
+                                                        context, email);
+                                                // Tutup modal ketika reset password berhasil
+                                                Navigator.of(context).pop();
+                                              } catch (e) {
+                                                // Tambahkan penanganan kesalahan jika diperlukan
+                                              }
                                             },
                                             style: ButtonStyle(
                                               shape: MaterialStateProperty.all<
@@ -250,26 +256,26 @@ late String email, password, role;
                       // )
                     ],
                   ),
-                  
 
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton.icon(
-  onPressed: () {
-    _handleLogin(); // Fungsi untuk melakukan login
-  },
-  style: ButtonStyle(
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-      RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0), // Sesuaikan radius sesuai kebutuhan
-      ),
-    ),
-  ),
-  icon: Icon(Icons.login), // Ikon default sebelum diklik
-  label: Text("Login"),
-),
-
+                      onPressed: () {
+                        _handleLogin(); // Fungsi untuk melakukan login
+                      },
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                30.0), // Sesuaikan radius sesuai kebutuhan
+                          ),
+                        ),
+                      ),
+                      icon: Icon(Icons.login), // Ikon default sebelum diklik
+                      label: Text("Login"),
+                    ),
                   ),
                   const SizedBox(
                     height: 12,
@@ -280,7 +286,7 @@ late String email, password, role;
                       const Text("Belum punya Akun? "),
                       InkWell(
                         onTap: () {
-                          Get.to(() =>const Register());
+                          Get.to(() => const Register());
                         },
                         child: const Text(
                           "Daftar dulu Bro!",
@@ -298,4 +304,3 @@ late String email, password, role;
     );
   }
 }
-
