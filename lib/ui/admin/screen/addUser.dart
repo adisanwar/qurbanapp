@@ -24,14 +24,10 @@ class _AddUserState extends State<AddUser> {
       TextEditingController();
   final TextEditingController _waliController = TextEditingController();
   TextEditingController _roleController = TextEditingController();
-  final AdminController _addUserController =
-      Get.put(AdminController());
+  final AdminController _addUserController = Get.put(AdminController());
 
   String selectedValue = 'User';
-  List<String> dropdownItems = [
-    'Admin',
-    'User'
-  ];
+  List<String> dropdownItems = ['Admin', 'User'];
 
   bool doPasswordsMatch() {
     return _passwordController.text == _confirmPasswordController.text;
@@ -48,22 +44,19 @@ class _AddUserState extends State<AddUser> {
     // _roleController = selectedValue;
     // Call the registerUser method from the RegistrationController
     _addUserController.addUser(
-
-      _emailController.text,
-      _passwordController.text,
-      _noKkController.text,
-      _phoneController.text,
-      _waliController.text,
-      _roleController.text
-      
-    );
+        _emailController.text,
+        _passwordController.text,
+        _noKkController.text,
+        _phoneController.text,
+        _waliController.text,
+        _roleController.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tambah User"),
+        title: Text("Tambah User"),backgroundColor: Colors.blue[800],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -117,9 +110,9 @@ class _AddUserState extends State<AddUser> {
                       child: TextFormField(
                         controller: _phoneController,
                         keyboardType: TextInputType.number,
-                        maxLength: 12,
+                        maxLength: 14,
                         decoration: InputDecoration(
-                          hintText: "Nomor HP (cth. 0812xxx)",
+                          hintText: "Nomor HP (cth. +62812xxx)",
                           prefixIcon: const Icon(Icons.phone),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.grey),
@@ -212,33 +205,34 @@ class _AddUserState extends State<AddUser> {
                     const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: EdgeInsets.all(5.0),
-      child: DropdownButton<String>(
-        value: selectedValue,
-        items: dropdownItems.map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Row(
-            children: [
-              Icon(Icons.person_2_outlined), // Ganti dengan ikon yang sesuai
-              SizedBox(width: 8.0),
-              Text(value),
-            ],
-          ),
-        );
-        }).toList(),
-        onChanged: (String? newValue) {
-        setState(() {
-          selectedValue = newValue ?? '';
-          _roleController.text = selectedValue;
-          print(_roleController);
-        });
-        },
-      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.all(5.0),
+                      child: DropdownButton<String>(
+                        value: selectedValue,
+                        items: dropdownItems.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Row(
+                              children: [
+                                Icon(Icons
+                                    .person_2_outlined), // Ganti dengan ikon yang sesuai
+                                SizedBox(width: 8.0),
+                                Text(value),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedValue = newValue ?? '';
+                            _roleController.text = selectedValue;
+                            print(_roleController);
+                          });
+                        },
+                      ),
                     ),
 
                     const SizedBox(height: 10),
@@ -357,8 +351,8 @@ class _AddUserState extends State<AddUser> {
                           });
                         },
                         style: ButtonStyle(
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
@@ -371,8 +365,6 @@ class _AddUserState extends State<AddUser> {
                                     "Tambah User"), // Show "Register" button when not loading
                       ),
                     ),
-
-                   
                   ],
                 )
               ],

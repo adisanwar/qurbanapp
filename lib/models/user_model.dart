@@ -7,6 +7,7 @@ class UserModel {
   final String phone;
   final String role;
   final bool getqurban;
+  final bool verifByAdmin;
 
   UserModel(
       {this.id,
@@ -14,10 +15,11 @@ class UserModel {
       required this.nokk,
       required this.phone,
       required this.role,
-      required this.getqurban});
+      required this.getqurban,
+      required this.verifByAdmin});
 
   toJson() {
-    return {"wali": name, "no_kk": nokk, "phone": phone, "role": role, "getqurban": getqurban};
+    return {"wali": name, "no_kk": nokk, "phone": phone, "role": role, "getqurban": getqurban, "verifByAdmin" : verifByAdmin};
   }
 
  factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -32,8 +34,9 @@ class UserModel {
   final phone = data['phone'] ?? '';
   final role = data['role'] ?? '';
   final getqurban = data['getqurban'] ?? false;
+  final verifByAdmin = data['verifByAdmin'] ?? false;
 
-  return UserModel(id: id, name: name, nokk: nokk, phone: phone, role: role, getqurban: getqurban);
+  return UserModel(id: id, name: name, nokk: nokk, phone: phone, role: role, getqurban: getqurban, verifByAdmin: verifByAdmin);
 }
 }
 

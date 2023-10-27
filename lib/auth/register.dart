@@ -112,9 +112,9 @@ class _RegisterState extends State<Register> {
                         child: TextFormField(
                           controller: _phoneController,
                           keyboardType: TextInputType.number,
-                          maxLength: 12,
+                          maxLength: 14,
                           decoration: InputDecoration(
-                            hintText: "Nomor HP (cth. 0812xxx)",
+                            hintText: "Nomor HP (cth. +62812xxx)",
                             prefixIcon: const Icon(Icons.phone),
                             focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(color: Colors.grey),
