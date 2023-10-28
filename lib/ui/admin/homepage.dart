@@ -9,7 +9,6 @@ import '../../helpers/usercontroller.dart';
 import '../../models/user_model.dart';
 import 'screen/userControl.dart';
 import 'screen/confirmUser.dart';
-import 'screen/resultQurban.dart';
 
 class HomePage extends StatelessWidget {
   final String docId;
@@ -150,10 +149,10 @@ class HomePage extends StatelessWidget {
                                     22, // Sesuaikan ukuran teks sesuai kebutuhan
                               ),
                             ),
-                            Text(
+                            const Text(
                               "Have a nice Day and Always Grateful",
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors
                                     .white, // Sesuaikan warna teks sesuai kebutuhan

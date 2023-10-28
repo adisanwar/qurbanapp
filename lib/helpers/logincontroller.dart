@@ -101,7 +101,7 @@ class LoginController extends GetxController {
       await _auth.sendPasswordResetEmail(email: email);
       Get.snackbar('Success', 'Password Reset Dikirim');
       
-      Get.to(() => Login());
+      Get.to(() => const Login());
     } on FirebaseAuthException catch (e) {
       print(e);
       Get.snackbar('Error', '${e.message}');

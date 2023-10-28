@@ -2,9 +2,7 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:qurban_app/auth/login.dart';
 import 'package:qurban_app/helpers/adminController.dart';
-import 'package:qurban_app/helpers/registrationcontroller.dart';
 
 class AddUser extends StatefulWidget {
   const AddUser({Key? key}) : super(key: key);
@@ -23,7 +21,7 @@ class _AddUserState extends State<AddUser> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _waliController = TextEditingController();
-  TextEditingController _roleController = TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
   final AdminController _addUserController = Get.put(AdminController());
 
   String selectedValue = 'User';
@@ -56,11 +54,11 @@ class _AddUserState extends State<AddUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tambah User"),backgroundColor: Colors.blue[800],
+        title: const Text("Tambah User"),backgroundColor: Colors.blue[800],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20),
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
@@ -209,7 +207,7 @@ class _AddUserState extends State<AddUser> {
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      padding: EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(5.0),
                       child: DropdownButton<String>(
                         value: selectedValue,
                         items: dropdownItems.map((String value) {
@@ -217,9 +215,9 @@ class _AddUserState extends State<AddUser> {
                             value: value,
                             child: Row(
                               children: [
-                                Icon(Icons
+                                const Icon(Icons
                                     .person_2_outlined), // Ganti dengan ikon yang sesuai
-                                SizedBox(width: 8.0),
+                                const SizedBox(width: 8.0),
                                 Text(value),
                               ],
                             ),

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,7 +33,7 @@ class UserControl extends StatelessWidget {
           title: const Text('User Control'), backgroundColor: Colors.blue[800]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => AddUser());
+          Get.to(() => const AddUser());
           // Aksi yang akan diambil saat tombol tindakan mengambang ditekan
         },
         child: const Icon(Icons.add), // Ganti ikon dengan ikon yang sesuai
@@ -90,12 +89,11 @@ class UserControl extends StatelessWidget {
                                                 context, // Pastikan Anda memiliki context yang sesuai
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: Text('Verifikasi'),
+                                                title: const Text('Verifikasi'),
                                                 content: Text(
-                                                    'Apakah Anda yakin ingin verifikasi user${user.name} dengan no KK ${user.nokk}?'),
+                                                    'Apakah Anda yakin ingin verifikasi \n${user.name} No KK: ${user.nokk}.?'),
                                                 actions: [
                                                   ElevatedButton(
-                                                    child: Text('Batal'),
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();
@@ -115,9 +113,9 @@ class UserControl extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    child: const Text('Batal'),
                                                   ),
                                                   ElevatedButton(
-                                                    child: Text('Verifikasi'),
                                                     onPressed: () {
                                                       String noKk = user.nokk;
                                                      adminController.updateVerifByAdmin(noKk);
@@ -142,13 +140,14 @@ class UserControl extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    child: const Text('Verifikasi'),
                                                   ),
                                                 ],
                                               );
                                             },
                                           );
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Belum diverifikasi',
                                           style: TextStyle(color: Colors.red),
                                         ),
@@ -156,7 +155,10 @@ class UserControl extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.edit, color: Colors.green),
                               onPressed: () {
-                                Get.to(()=>EditUser());
+                                // String? userID = user.id;
+                                print(user.id);
+                                // Get.to(() => EditUser(userID: user.id));
+
                                 // Aksi yang akan diambil saat tombol Edit ditekan
                               },
                             ),
@@ -171,24 +173,23 @@ class UserControl extends StatelessWidget {
                                       context: context,
                                       builder: (BuildContext context) =>
                                           AlertDialog(
-                                            title: Text('Hapus'),
+                                            title: const Text('Hapus'),
                                             content: Text(
                                                 'Yakin Ingin Menghapus ${user.name}?'),
                                             actions: [
                                               ElevatedButton(
-                                                child: Text('Hapus'),
                                                 onPressed: () {
                                                   // String userNow  =  FirebaseAuth.instance.currentUser!.uid;
                                                   String? userId = user.id;
                                                   String? name = user.name;
                                                   // print("akun : ${userNow}");
-                                                  print("docID : ${userId} ");
+                                                  print("docID : $userId ");
                                                   try {
                                                     adminController
                                                         .deleteUserData(
                                                             userId!, name);
                                                     Navigator.of(context).pop();
-                                                    Get.to(() => UserControl());
+                                                    Get.to(() => const UserControl());
                                                     // Tambahkan logika lain yang perlu dilakukan jika penghapusan berhasil
                                                   } catch (e) {
                                                     print(
@@ -209,9 +210,9 @@ class UserControl extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
+                                                child: const Text('Hapus'),
                                               ),
                                               ElevatedButton(
-                                                child: Text('Batal'),
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
@@ -228,6 +229,7 @@ class UserControl extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
+                                                child: const Text('Batal'),
                                               ),
                                             ],
                                           ));

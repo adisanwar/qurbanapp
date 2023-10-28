@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -22,54 +23,100 @@ class AdminController extends GetxController {
   // String userId = 'ID_PENGGUNA_YANG_INGIN_DIEDIT';
 
 // Mengedit data di dokumen pengguna tertentu
-Future<void> editUserData(UserModel user) async {
-  await _firestore.collection('users').doc(user.id).update(user.toJson());
-  // try {
-  //   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  //   await users.doc(userId).update({
-  //     'name': name, 
-  //     'nokk': nokk, 
-  //     'phone': phone,
-  //     'getqurban': getqurban,
-  //     // Tambahkan bidang lain yang ingin Anda ubah
-  //   });
-  //   print('Data pengguna berhasil diubah.');
-  // } catch (e) {
-  //   print('Gagal mengedit data pengguna: $e');
-  // }
-}
+  Future<void> editUserData(UserModel user) async {
+    try {
+      final userRef = _firestore.collection('users').doc(user.id);
+      await userRef.update(user.toJson());
+      print('User data successfully updated.');
+    } catch (e) {
+      print('Failed to edit user data: $e');
+    }
+  }
 
-Stream<List<UserModel>> allUsers() {
-  final userStreamController = StreamController<List<UserModel>>();
+  Stream<List<UserModel>> allUsers() {
+    final userStreamController = StreamController<List<UserModel>>();
 
-  final userCollection = FirebaseFirestore.instance.collection('users');
+    final userCollection = FirebaseFirestore.instance.collection('users');
 
-  final subscription = userCollection.snapshots().listen((querySnapshot) {
-    final users = querySnapshot.docs.map((userDocument) {
-      return UserModel.fromSnapshot(userDocument);
-    }).toList();
+    final subscription = userCollection.snapshots().listen((querySnapshot) {
+      final users = querySnapshot.docs.map((userDocument) {
+        return UserModel.fromSnapshot(userDocument);
+      }).toList();
 
-    userStreamController.add(users);
-  });
+      userStreamController.add(users);
+    });
 
-  return userStreamController.stream;
-}
+    return userStreamController.stream;
+  }
 
-Future<List<UserModel>> getallUsers() async {
-  final userCollection = FirebaseFirestore.instance.collection('users');
-  final querySnapshot = await userCollection.get();
+//    Future<UserModel> getUserData(String userId) async {
+//   try {
+//     final userCollection = FirebaseFirestore.instance.collection('users');
+//     final userDocument = await userCollection.doc(userId).get();
 
-  if (querySnapshot.docs.isNotEmpty) {
-    final users = querySnapshot.docs.map((userDocument) {
-      return UserModel.fromSnapshot(userDocument);
-    }).toList();
+//     if (userDocument.exists) {
+//       final userData = UserModel.fromSnapshot(userDocument);
+//       return userData;
+//     } else {
+//       throw Exception('User not found');
+//     }
+//   } catch (e) {
+//     throw Exception('Failed to get user data: $e');
+//   }
+// }
 
-    return users;
+//   Future<void> updateUserName(String userId, String newName) async {
+//   try {
+//     final userCollection = FirebaseFirestore.instance.collection('users');
+//     final userDocument = userCollection.doc(userId);
+
+//     await userDocument.update({
+//       "wali": newName,
+//     });
+//   } catch (e) {
+//     throw Exception('Failed to update user name: $e');
+//   }
+// }
+
+//  Future<List<UserModel>> getAllUsers() async {
+//   final snapshot = await _firestore.collection('users').get();
+//   final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList();
+//   return userData;
+// }
+
+// Future<void> updateRecord(UserModel user) async {
+//   await _firestore.collection('users').doc(user.id).update(user.toJson());
+// }
+
+// Future<UserModel?> getUserData(String userId) async {
+//   final users = await getAllUsers();
+//   final user = users.firstWhere((user) => user.id == userId, orElse: () => );
+//   return user;
+// }
+
+Future<UserModel> getUserById(String userId) async {
+  print(userId);
+  final QuerySnapshot<Map<String, dynamic>> userSnapshot =
+      await FirebaseFirestore.instance
+          .collection('users')
+          .where('id', isEqualTo: userId)
+          .get();
+
+  if (userSnapshot.docs.isNotEmpty) {
+    final userData = userSnapshot.docs.first.data();
+    return UserModel(
+      id: userId,
+      name: userData['name'] ?? '',
+      nokk: userData['no_kk'] ?? '',
+      phone: userData['phone'] ?? '',
+      role: userData['role'] ?? '',
+      getqurban: userData['getqurban'] ?? false,
+      verifByAdmin: userData['verifByAdmin'] ?? false,
+    );
   } else {
-    throw Exception('No users found');
+    throw Exception('User with the specified userId not found');
   }
 }
-
 
 
   Future<void> scanQR() async {
@@ -142,7 +189,7 @@ Future<List<UserModel>> getallUsers() async {
                       'Kepala Keluarga',
                       'Nomor KK',
                       'Telepon',
-                      'Get Qurban'
+                      'Status Penerima'
                     ],
                     // Data from Firestore
                     ...querySnapshot.docs.map((doc) {
@@ -172,57 +219,52 @@ Future<List<UserModel>> getallUsers() async {
       await file.writeAsBytes(bytes);
       await OpenFile.open(file.path);
       print('file dibuka');
-      ;
     } catch (e) {
       print('Terjadi kesalahan: $e');
     }
   }
 
   Future<void> updateVerifByAdmin(String noKk) async {
-  try {
-    await FirebaseFirestore.instance
-        .collection('users') // Ganti dengan nama koleksi yang sesuai
-        .where('no_kk', isEqualTo: noKk) // Filter berdasarkan nomor KK
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        // Loop melalui semua dokumen yang cocok
-        doc.reference.update({
-          'verifByAdmin': true,
-        });
-        
+    try {
+      await FirebaseFirestore.instance
+          .collection('users') // Ganti dengan nama koleksi yang sesuai
+          .where('no_kk', isEqualTo: noKk) // Filter berdasarkan nomor KK
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          // Loop melalui semua dokumen yang cocok
+          doc.reference.update({
+            'verifByAdmin': true,
+          });
+        }
       });
-    });
 
-    print('Data berhasil diupdate.');
-    // Tambahkan tindakan lain yang perlu dilakukan jika pembaruan berhasil
-  } catch (e) {
-    print('Terjadi kesalahan saat mengupdate data: $e');
-    // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
+      print('Data berhasil diupdate.');
+      // Tambahkan tindakan lain yang perlu dilakukan jika pembaruan berhasil
+    } catch (e) {
+      print('Terjadi kesalahan saat mengupdate data: $e');
+      // Tambahkan penanganan kesalahan sesuai kebutuhan Anda
+    }
   }
-}
 
   Future<void> deleteUserData(String docId, String name) async {
-      try {
-        // Hapus dokumen pengguna berdasarkan docId
-        // String userId = docId;
-        print(docId);
+    try {
+      // Hapus dokumen pengguna berdasarkan docId
+      // String userId = docId;
+      print(docId);
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(docId)
-            .delete();
+      await FirebaseFirestore.instance.collection('users').doc(docId).delete();
 
-        // Hapus akun pengguna dari Firebase Authentication
-        // await FirebaseAuth.instance.currentUser!.delete();
-        Get.snackbar("Sukses", "Data ${name} Berhasil Dihapus");
-        // Get.to(()=> const UserControl());
+      // Hapus akun pengguna dari Firebase Authentication
+      // await FirebaseAuth.instance.currentUser!.delete();
+      Get.snackbar("Sukses", "Data $name Berhasil Dihapus");
+      // Get.to(()=> const UserControl());
 
-        print('User dengan docId $docId berhasil dihapus');
-      } catch (e) {
-        throw Exception('Error deleting user and data: $e');
-      }
+      print('User dengan docId $docId berhasil dihapus');
+    } catch (e) {
+      throw Exception('Error deleting user and data: $e');
     }
+  }
 
   Future<void> addUser(String email, String password, String noKk, String phone,
       String wali, String role) async {
@@ -249,8 +291,6 @@ Future<List<UserModel>> getallUsers() async {
           email: email,
           password: password,
         );
-
-        
 
         try {
           await FirebaseAuth.instance.verifyPhoneNumber(

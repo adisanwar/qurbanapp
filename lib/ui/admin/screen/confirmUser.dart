@@ -13,7 +13,7 @@ class ConfirmUser extends StatelessWidget {
     User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Daftar Penerima'), backgroundColor: Colors.blue),
+          title: const Text('Daftar Penerima'), backgroundColor: Colors.blue[800]),
       body: FutureBuilder(
           future: userController.allUsers(),
           builder: (context, snapshot) {

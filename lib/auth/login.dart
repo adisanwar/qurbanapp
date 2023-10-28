@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:qurban_app/auth/register.dart';
 import 'package:qurban_app/helpers/logincontroller.dart';
@@ -273,8 +272,8 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      icon: Icon(Icons.login), // Ikon default sebelum diklik
-                      label: Text("Login"),
+                      icon: const Icon(Icons.login), // Ikon default sebelum diklik
+                      label: const Text("Login"),
                     ),
                   ),
                   const SizedBox(

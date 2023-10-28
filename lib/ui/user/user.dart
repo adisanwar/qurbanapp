@@ -184,7 +184,7 @@ class UserPage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   !user.verifByAdmin
-                                      ? Text(
+                                      ? const Text(
                                         'Akun Anda Belum diverifikasi Admin\n \nSilahkan Verifikasi dengan membawa atau menunjukan Kartu Keluarga'
                                           ,
                                           style: TextStyle(
@@ -196,8 +196,8 @@ class UserPage extends StatelessWidget {
                                           ),
                                           textAlign: TextAlign.center,
                                         )
-                                      : (!user.getqurban)
-                                          ? Text(
+                                      : (user.getqurban)
+                                          ? const Text(
                                             'Anda Sudah Menerima Qurban'
                                               ,
                                               style: TextStyle(
