@@ -20,18 +20,6 @@ class AdminController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final RxBool isRegistered = false.obs;
 
-  // String userId = 'ID_PENGGUNA_YANG_INGIN_DIEDIT';
-
-// Mengedit data di dokumen pengguna tertentu
-  Future<void> editUserData(UserModel user) async {
-    try {
-      final userRef = _firestore.collection('users').doc(user.id);
-      await userRef.update(user.toJson());
-      print('User data successfully updated.');
-    } catch (e) {
-      print('Failed to edit user data: $e');
-    }
-  }
 
   Stream<List<UserModel>> allUsers() {
     final userStreamController = StreamController<List<UserModel>>();
@@ -49,74 +37,23 @@ class AdminController extends GetxController {
     return userStreamController.stream;
   }
 
-//    Future<UserModel> getUserData(String userId) async {
-//   try {
-//     final userCollection = FirebaseFirestore.instance.collection('users');
-//     final userDocument = await userCollection.doc(userId).get();
-
-//     if (userDocument.exists) {
-//       final userData = UserModel.fromSnapshot(userDocument);
-//       return userData;
-//     } else {
-//       throw Exception('User not found');
-//     }
-//   } catch (e) {
-//     throw Exception('Failed to get user data: $e');
-//   }
-// }
-
-//   Future<void> updateUserName(String userId, String newName) async {
-//   try {
-//     final userCollection = FirebaseFirestore.instance.collection('users');
-//     final userDocument = userCollection.doc(userId);
-
-//     await userDocument.update({
-//       "wali": newName,
-//     });
-//   } catch (e) {
-//     throw Exception('Failed to update user name: $e');
-//   }
-// }
-
-//  Future<List<UserModel>> getAllUsers() async {
-//   final snapshot = await _firestore.collection('users').get();
-//   final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList();
-//   return userData;
-// }
-
-// Future<void> updateRecord(UserModel user) async {
-//   await _firestore.collection('users').doc(user.id).update(user.toJson());
-// }
-
-// Future<UserModel?> getUserData(String userId) async {
-//   final users = await getAllUsers();
-//   final user = users.firstWhere((user) => user.id == userId, orElse: () => );
-//   return user;
-// }
-
-Future<UserModel> getUserById(String userId) async {
-  print(userId);
-  final QuerySnapshot<Map<String, dynamic>> userSnapshot =
-      await FirebaseFirestore.instance
-          .collection('users')
-          .where('id', isEqualTo: userId)
-          .get();
-
-  if (userSnapshot.docs.isNotEmpty) {
-    final userData = userSnapshot.docs.first.data();
-    return UserModel(
-      id: userId,
-      name: userData['name'] ?? '',
-      nokk: userData['no_kk'] ?? '',
-      phone: userData['phone'] ?? '',
-      role: userData['role'] ?? '',
-      getqurban: userData['getqurban'] ?? false,
-      verifByAdmin: userData['verifByAdmin'] ?? false,
-    );
-  } else {
-    throw Exception('User with the specified userId not found');
+  Future<QuerySnapshot> getData() async {
+  try {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
+    return snapshot;
+  } catch (e) {
+    throw Exception('Failed to fetch data from Firestore: $e');
   }
 }
+
+Future<void> updateData(String documentId, Map<String, dynamic> newData) async {
+  try {
+    await FirebaseFirestore.instance.collection('users').doc(documentId).update(newData);
+  } catch (e) {
+    print('Error updating data: $e');
+  }
+}
+
 
 
   Future<void> scanQR() async {
