@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qurban_app/helpers/adminController.dart';
 import 'package:qurban_app/helpers/usercontroller.dart';
+import 'package:qurban_app/ui/admin/homepage.dart';
 import 'package:qurban_app/ui/admin/screen/addUser.dart';
 import 'package:qurban_app/ui/admin/screen/editUser.dart';
 
@@ -29,8 +30,16 @@ class UserControl extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        
-          title: const Text('User Control'), backgroundColor: Colors.blue[800]),
+    title: const Text('User Control'),
+    backgroundColor: Colors.blue[800],
+    leading: IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        Get.to(() => HomePage(docId: user!.uid));
+        // Aksi yang akan diambil saat tombol back ditekan
+      },
+    ),
+  ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(() => const AddUser());
@@ -157,7 +166,7 @@ class UserControl extends StatelessWidget {
                               onPressed: () {
                                 // String? userID = user.id;
                                 print(user.id);
-                                // Get.to(() => EditUser(userID: user.id));
+                                Get.to(() => EditUser(userID: user.id));
 
                                 // Aksi yang akan diambil saat tombol Edit ditekan
                               },

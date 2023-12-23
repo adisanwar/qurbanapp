@@ -46,6 +46,8 @@ class AdminController extends GetxController {
   }
 }
 
+
+
 Future<void> updateData(String documentId, Map<String, dynamic> newData) async {
   try {
     await FirebaseFirestore.instance.collection('users').doc(documentId).update(newData);
