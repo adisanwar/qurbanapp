@@ -106,7 +106,7 @@ class _EditUserState extends State<EditUser> {
             ),
             TextFormField(
               controller: _waliController,
-              maxLength: 16,
+              // maxLength: 16,
               decoration: InputDecoration(
                 labelText: 'Kepala Keluarga',
                 hintText: 'Masukkan Nama Kepala Keluarga',
